@@ -7,7 +7,7 @@ var mysql = require('mysql');
 var app = require('http').createServer(handler)
  , io = require('socket.io').listen(app)
  , fs = require('fs');
-app.listen(8124);
+app.listen(1337, "0.0.0.0");
 
 function handler (req, res) {
   if(req.url=='/'){
@@ -72,7 +72,9 @@ io.sockets.on('connection', function (socket) {
 });
 
 var con = mysql.createConnection({
-  host: "172.17.241.70",
+  host: "localhost",
+  port: "2021",
   user: "kugwa",
-  password: ""
+  password: "",
+  database: "mydb"
 });
