@@ -1,18 +1,20 @@
 var http = require('http');
 var url = require('url');
-var io = require('socket.io').listen(server)
+var io = require('socket.io').listen(app)
 var fs = require('fs');
 var mysql = require('mysql');
 
 var app = require('http').createServer(handler)
- , io = require('socket.io').listen(app)
- , fs = require('fs');
-app.listen(1337, "0.0.0.0");
+app.listen(1337);
 
 function handler (req, res) {
   if(req.url=='/'){
               res.writeHead(200,{'Content-Type':'text/html'});
-              res.write('<html><body>This is Home Page.</body></html>');
+	      console.log(1);
+              console.log(req.url);
+	      console.log(typeof(req.url));
+              console.log(req.url.toString);	
+	      res.write('<html><body>This is Home Page.</body></html>');
               res.end();
           }else if(req.url=='/student'){
               res.writeHead(200,{'Content-Type':'text/html'});
@@ -22,24 +24,23 @@ function handler (req, res) {
               res.writeHead(200,{'Content-Type':'text/html'});
               res.write('<html><body>This is admin Page.</body></html>');
               res.end();
-          }else if(req.url=='/user='+ user)
+          }else if(req.url.includes('/user='))
           // route for getting user id
               {
-                uid = user_func(req.url)
-                var result = con.connect(function(err) {
-                if (err) throw err;
-                var result = con.query("SELECT * FROM user WHERE u_id = "+ uid , function (err, result) {
+                uid = user_func(req.url);
+                con.connect(function(err) {
                   if (err) throw err;
-                  return result
+                  con.query("SELECT * FROM user WHERE u_id = "+ uid , function (err, result, fields) {
+                    if (err) throw err;
+		    console.log(result)
                 });
-                return result
               });
-          // parse data
+//           parse data
 
-          // send data
-              res.writeHead(200,{'Content-Type':'text/html'});
-              res.write('<html><body>This is admin Page.</body></html>');
-              res.end();
+//           send data
+               res.writeHead(200,{'Content-Type':'text/html'});
+               res.write('<html><body>This is admin Page.</body></html>');
+               res.end();
 
               }
 
