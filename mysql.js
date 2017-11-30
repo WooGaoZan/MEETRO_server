@@ -20,5 +20,5 @@ con.connect(function(err) {
           if (err) throw err;
           console.log(result[0].u_id);
       });
-      
+
 });

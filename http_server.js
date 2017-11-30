@@ -10,11 +10,7 @@ app.listen(1337);
 function handler (req, res) {
   if(req.url=='/'){
               res.writeHead(200,{'Content-Type':'text/html'});
-	      console.log(1);
-              console.log(req.url);
-	      console.log(typeof(req.url));
-              console.log(req.url.toString);	
-	      res.write('<html><body>This is Home Page.</body></html>');
+	            res.write('<html><body>This is Home Page.</body></html>');
               res.end();
           }else if(req.url=='/student'){
               res.writeHead(200,{'Content-Type':'text/html'});
@@ -24,25 +20,59 @@ function handler (req, res) {
               res.writeHead(200,{'Content-Type':'text/html'});
               res.write('<html><body>This is admin Page.</body></html>');
               res.end();
-          }else if(req.url.includes('/user='))
+          }else if(req.url.includes('/user?'))
           // route for getting user id
               {
                 uid = user_func(req.url);
                 con.connect(function(err) {
                   if (err) throw err;
-                  con.query("SELECT * FROM user WHERE u_id = "+ uid , function (err, result, fields) {
+                  con.query("SELECT * FROM user WHERE u_id = "+ uid ,function (err, result, fields) {
                     if (err) throw err;
-		    console.log(result)
+                      // res.writeHead(200,{'Content-Type':''});
+                      // res.write(result);
+                      // res.end(result);
+
                 });
               });
-//           parse data
+              // res.writeHead(200,{'Content-Type':'JSON'});
+              // res.write(result);
+              // res.end();
+              }else if(req.url.includes('/userwish?'))
+              // route for getting user id
+               {
+                 con.connect(function(err) {
+                   user_wish = userwish_func(req.url);
+                   if (err) throw err;
+                   // var sql = "INSERT INTO user_wish (u_id, wish) VALUES ("+user_wish[0]+","+user_wish[1]+")";
+                   var sql = "INSERT INTO user_wish (u_id, wish) VALUES ("+user_wish[0]+','+user_wish[1]+")";
+                   console.log(sql);
+                   con.query(sql, function (err, result) {
+                     if (err) throw err;
+                     console.log("1 record inserted");
+                   });
+               });
+                res.writeHead(200,{'Content-Type':'text/html'});
+                res.write('<html><body>This is User Wish Page.</body></html>');
+                res.end();
 
-//           send data
-               res.writeHead(200,{'Content-Type':'text/html'});
-               res.write('<html><body>This is admin Page.</body></html>');
-               res.end();
+              }else if(req.url.includes('/wishlist?'))
+               // route for getting user id
+                   {
+                     con.connect(function(err) {
+                      if (err) throw err;
+                      con.query("SELECT * FROM user_wish", function (err, result, fields) {
+                        if (err) throw err;
+                        console.log(result);
+                      });
+                   });
+     //           parse data
 
-              }
+     //           send data
+                    res.writeHead(200,{'Content-Type':'text/html'});
+                    res.write('<html><body>This is Dicuss Page.</body></html>');
+                    res.end();
+
+                   }
 
  fs.readFile(__dirname + '/chat.html', function (err, data) {
      if (err) {
@@ -54,9 +84,22 @@ function handler (req, res) {
         });
 }
 
+// parse req_url
 function user_func(req_url) {
   return req_url.charAt(6);
 }
+
+function userwish_func(req_url) {
+  a = req_url.substring(req_url.lastIndexOf("u=")+2,req_url.lastIndexOf("&"));
+  b = req_url.substring(req_url.lastIndexOf("w=")+2,req_url.length);
+  b = '\''+b+'\''
+  console.log(a);
+  console.log(b);
+  return [a,b];
+}
+
+
+// SOCKETS
 io.sockets.on('connection', function (socket) {
  socket.on('addme',function(username) {
   socket.username = username;
@@ -74,7 +117,7 @@ io.sockets.on('connection', function (socket) {
 
 var con = mysql.createConnection({
   host: "localhost",
-  port: "2021",
+  port: "2020",
   user: "kugwa",
   password: "",
   database: "mydb"
