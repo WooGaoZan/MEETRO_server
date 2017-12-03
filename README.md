@@ -21,14 +21,8 @@ Here has four route:
 
 ```
 /data
-```
-```
 /user?
-```
-```
 /userwish?
-```
-```
 /wishlist?
 ```
 
@@ -85,4 +79,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* [City Science Mobility++ Hackathon 2017 / MIT 城市科學【多元運輸】黑客松 2017](https://www.media.mit.edu/events/csopen-taipei-2017/)
+[City Science Mobility++ Hackathon 2017 / MIT 城市科學【多元運輸】黑客松 2017](https://www.media.mit.edu/events/csopen-taipei-2017/)
